@@ -14,7 +14,7 @@ class Cell
     self
   end
   
-  def unlink(cell, false)
+  def unlink(cell, bidi = true)
     @links.delete(cell)
     cell.unlink(self, false) if bidi
     self
@@ -25,7 +25,7 @@ class Cell
   end
   
   def linked?(cell)
-    @links.keys?(cell)
+    @links.key?(cell)
   end
   
   def neighbors

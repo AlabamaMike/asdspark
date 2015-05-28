@@ -19,12 +19,13 @@ class Grid
   end
   
   def configure_cells
-    row, col = cell.row, cell.column
-    
-    cell.north = self[row - 1, column]
-    cell.south = self[row + 1, column]
-    cell.east = self[row, column + 1]
-    cell.west = self[row, column - 1]
+    each_cell do |cell|
+      row, column = cell.row, cell.column
+      cell.north = self[row - 1, column]
+      cell.south = self[row + 1, column]
+      cell.east = self[row, column + 1]
+      cell.west = self[row, column - 1]
+    end
   end
   
   def [](row, column)
@@ -54,6 +55,32 @@ class Grid
         yield cell if cell
       end
     end
+  end
+  
+  def to_s
+    output = "+" + "---+" * columns + "\n"
+    
+    each_row do |row|
+      top = "|"
+      bottom = "+"
+      
+      row.each do |cell|
+        cell = Cell.new(-1, -1) unless cell
+        body = "   "
+        
+        east_boundary = cell.linked?(cell.east) ? "   " : "|"
+        top << body << east_boundary
+        
+        south_boundary = cell.linked?(cell.south) ? "   " : "---"
+        corner = "+"
+        bottom << south_boundary << corner
+      end
+      
+      output << top << "\n"
+      output << bottom << "\n"
+    end
+    
+    output 
   end
 end
     
